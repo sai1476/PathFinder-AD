@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Structural Attack Paths & Relationships</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">
+            NetworkX graph traversal discovering multi-hop privilege progression chains.
+        </p>
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--brand-accent);">
+    <h3 style="font-size: 1.05rem; margin-bottom: 0.5rem;">Methodology & Scope Disclaimer</h3>
+    <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5;">
+        These paths illustrate <strong>structural permission chains</strong> identified from user memberships, nested groups,
+        and explicit Access Control Entries (ACLs) within the synthetic dataset.
+        <strong>They do not represent confirmed live exploits</strong>, as exploitability in a production environment
+        is subject to host isolation, Tiered Administration, network firewalls, Multi-Factor Authentication, and operational controls.
+    </p>
+</div>
+
+{% for p in risk_paths %}
+<div class="path-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+        <h3 style="font-size: 1.15rem;">
+            Path {{ p.path_id }}: <code>{{ p.source_identity }}</code> &rarr; <code style="color: #fca5a5;">{{ p.target_privileged_identity }}</code>
+        </h3>
+        <span class="badge badge-high">{{ p.length }} Hops</span>
+    </div>
+
+    <div class="path-chain">
+        {% for s in p.steps %}
+        <span class="chain-node">{{ s['from'] }}</span>
+        <span class="chain-edge">&rarr; [{{ s['right'] }}] &rarr;</span>
+        {% endfor %}
+        <span class="chain-node target">{{ p.target_privileged_identity }}</span>
+    </div>
+
+    <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 0.75rem;">
+        {{ p.explanation }}
+    </p>
+
+    <div class="path-disclaimer">
+        {{ p.disclaimer }}
+    </div>
+</div>
+{% else %}
+<div class="card" style="text-align: center; padding: 3rem;">
+    <h3 style="color: var(--text-secondary); margin-bottom: 0.5rem;">No Structural Paths Found</h3>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">
+        No reachable paths from standard user accounts to privileged Tier-0 targets were detected in this dataset.
+    </p>
+</div>
+{% endfor %}
+{% endblock %}

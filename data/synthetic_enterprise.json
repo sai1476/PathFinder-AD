@@ -1,0 +1,219 @@
+{
+  "domain": "CORP.LOCAL",
+  "generated_at": "2026-10-01T00:00:00Z",
+  "users": [
+    {
+      "sam_account_name": "adm_sarah",
+      "display_name": "Sarah Connor (Domain Admin)",
+      "distinguished_name": "CN=Sarah Connor,OU=Admins,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 1,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-28T10:15:00Z",
+      "password_last_set": "2026-08-01T12:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=corp,DC=local"
+      ],
+      "department": "Security & IT Operations"
+    },
+    {
+      "sam_account_name": "sql_svc",
+      "display_name": "SQL Database Service Account",
+      "distinguished_name": "CN=SQL Service,OU=ServiceAccounts,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 1,
+      "spn": [
+        "MSSQLSvc/sql01.corp.local:1433",
+        "MSSQLSvc/sql01.corp.local"
+      ],
+      "user_account_control": ["NORMAL_ACCOUNT", "DONT_EXPIRE_PASSWORD"],
+      "last_logon_timestamp": "2026-09-25T08:00:00Z",
+      "password_last_set": "2024-05-10T14:30:00Z",
+      "password_never_expires": true,
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=corp,DC=local"
+      ],
+      "department": "Database Operations"
+    },
+    {
+      "sam_account_name": "legacy_dev",
+      "display_name": "Legacy Developer Account",
+      "distinguished_name": "CN=Legacy Dev,OU=Developers,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2025-11-15T09:00:00Z",
+      "password_last_set": "2025-01-10T11:00:00Z",
+      "password_never_expires": false,
+      "member_of": [],
+      "department": "Application Development"
+    },
+    {
+      "sam_account_name": "backup_user",
+      "display_name": "Automated Backup Operator",
+      "distinguished_name": "CN=Backup User,OU=Operations,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT", "DONT_REQ_PREAUTH"],
+      "last_logon_timestamp": "2026-09-20T04:00:00Z",
+      "password_last_set": "2026-02-15T09:20:00Z",
+      "password_never_expires": false,
+      "member_of": [],
+      "department": "Infrastructure"
+    },
+    {
+      "sam_account_name": "kiosk_user",
+      "display_name": "Front Desk Kiosk",
+      "distinguished_name": "CN=Front Desk Kiosk,OU=Kiosks,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT", "PASSWD_NOTREQD"],
+      "last_logon_timestamp": "2026-09-29T11:00:00Z",
+      "password_last_set": "2026-03-01T10:00:00Z",
+      "password_never_expires": false,
+      "member_of": [],
+      "department": "Facilities"
+    },
+    {
+      "sam_account_name": "test_acc",
+      "display_name": "Test Account Reversible",
+      "distinguished_name": "CN=Test Account,OU=QA,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT", "ENCRYPTED_TEXT_PWD_ALLOWED"],
+      "last_logon_timestamp": "2026-09-10T14:00:00Z",
+      "password_last_set": "2026-04-12T16:00:00Z",
+      "password_never_expires": false,
+      "member_of": [],
+      "department": "Quality Assurance"
+    },
+    {
+      "sam_account_name": "contractor_bob",
+      "display_name": "Bob Vance (Contractor)",
+      "distinguished_name": "CN=Bob Vance,OU=Contractors,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-27T15:30:00Z",
+      "password_last_set": "2026-07-20T11:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=Contractors,OU=Groups,DC=corp,DC=local"
+      ],
+      "department": "External Vendors"
+    },
+    {
+      "sam_account_name": "helpdesk_alice",
+      "display_name": "Alice Support",
+      "distinguished_name": "CN=Alice Support,OU=Helpdesk,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-30T08:45:00Z",
+      "password_last_set": "2026-08-15T09:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=IT Helpdesk,OU=Groups,DC=corp,DC=local"
+      ],
+      "department": "IT Support"
+    }
+  ],
+  "groups": [
+    {
+      "sam_account_name": "Domain Admins",
+      "distinguished_name": "CN=Domain Admins,CN=Users,DC=corp,DC=local",
+      "is_privileged": true,
+      "members": [
+        "CN=Sarah Connor,OU=Admins,DC=corp,DC=local",
+        "CN=SQL Service,OU=ServiceAccounts,DC=corp,DC=local",
+        "CN=Junior Admins,OU=Groups,DC=corp,DC=local"
+      ],
+      "member_of": [],
+      "description": "Designated Domain Administrators"
+    },
+    {
+      "sam_account_name": "IT Helpdesk",
+      "distinguished_name": "CN=IT Helpdesk,OU=Groups,DC=corp,DC=local",
+      "is_privileged": false,
+      "members": [
+        "CN=Alice Support,OU=Helpdesk,DC=corp,DC=local"
+      ],
+      "member_of": [],
+      "description": "First-tier IT Support personnel"
+    },
+    {
+      "sam_account_name": "Junior Admins",
+      "distinguished_name": "CN=Junior Admins,OU=Groups,DC=corp,DC=local",
+      "is_privileged": false,
+      "members": [],
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=corp,DC=local"
+      ],
+      "description": "Junior administration pool (weakly nested into Domain Admins)"
+    },
+    {
+      "sam_account_name": "Contractors",
+      "distinguished_name": "CN=Contractors,OU=Groups,DC=corp,DC=local",
+      "is_privileged": false,
+      "members": [
+        "CN=Bob Vance,OU=Contractors,DC=corp,DC=local"
+      ],
+      "member_of": [],
+      "description": "External third-party contractors"
+    }
+  ],
+  "computers": [
+    {
+      "sam_account_name": "DC01$",
+      "distinguished_name": "CN=DC01,OU=Domain Controllers,DC=corp,DC=local",
+      "operating_system": "Windows Server 2022 Datacenter",
+      "enabled": true,
+      "is_domain_controller": true,
+      "delegation_type": "Unconstrained",
+      "user_account_control": ["SERVER_TRUST_ACCOUNT", "TRUSTED_FOR_DELEGATION"],
+      "member_of": []
+    },
+    {
+      "sam_account_name": "SRV-APP01$",
+      "distinguished_name": "CN=SRV-APP01,OU=Application Servers,DC=corp,DC=local",
+      "operating_system": "Windows Server 2019 Standard",
+      "enabled": true,
+      "is_domain_controller": false,
+      "delegation_type": "Unconstrained",
+      "user_account_control": ["WORKSTATION_TRUST_ACCOUNT", "TRUSTED_FOR_DELEGATION"],
+      "member_of": []
+    },
+    {
+      "sam_account_name": "WS-FIN01$",
+      "distinguished_name": "CN=WS-FIN01,OU=Finance Workstations,DC=corp,DC=local",
+      "operating_system": "Windows 11 Enterprise",
+      "enabled": true,
+      "is_domain_controller": false,
+      "delegation_type": "None",
+      "user_account_control": ["WORKSTATION_TRUST_ACCOUNT"],
+      "member_of": []
+    }
+  ],
+  "acls": [
+    {
+      "principal_name": "CN=Contractors,OU=Groups,DC=corp,DC=local",
+      "target_name": "CN=IT Helpdesk,OU=Groups,DC=corp,DC=local",
+      "right": "GenericAll",
+      "is_inherited": false
+    },
+    {
+      "principal_name": "CN=IT Helpdesk,OU=Groups,DC=corp,DC=local",
+      "target_name": "CN=Domain Admins,CN=Users,DC=corp,DC=local",
+      "right": "WriteDacl",
+      "is_inherited": false
+    }
+  ]
+}

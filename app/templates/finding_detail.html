@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="margin-bottom: 1.5rem;">
+    <a href="{{ url_for('main.findings') }}" class="btn btn-secondary btn-sm">&larr; Back to Findings</a>
+</div>
+
+<div class="card">
+    <div class="detail-header">
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+            <span class="badge badge-{{ finding.severity|lower }}">{{ finding.severity }}</span>
+            <code>{{ finding.rule_id }}</code>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">Finding ID: {{ finding.id }}</span>
+        </div>
+        <h1 style="font-size: 1.5rem;">{{ finding.title }}</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+            Target Object: <strong style="color: #fff;">{{ finding.affected_object }}</strong> &bull;
+            Type: <span class="badge badge-info">{{ finding.object_type }}</span>
+        </p>
+    </div>
+
+    <div class="detail-section">
+        <div class="detail-section-title">Technical Description & Risk Impact</div>
+        <p style="color: var(--text-primary); line-height: 1.6;">{{ finding.explanation }}</p>
+    </div>
+
+    <div class="detail-section">
+        <div class="detail-section-title">Observed Evidence (Synthetic Inventory Data)</div>
+        <pre><code>{{ finding.evidence | tojson(indent=2) }}</code></pre>
+    </div>
+
+    <div class="detail-section">
+        <div class="detail-section-title">Remediation Guidance</div>
+        <div class="remediation-box">
+            <p>{{ finding.remediation }}</p>
+        </div>
+    </div>
+
+    {% if finding.references %}
+    <div class="detail-section">
+        <div class="detail-section-title">Industry References & Documentation</div>
+        <ul style="padding-left: 1.25rem; color: var(--brand-primary);">
+            {% for ref in finding.references %}
+            <li style="margin-bottom: 0.25rem;">
+                <a href="{{ ref }}" target="_blank" rel="noopener" style="color: #818cf8; text-decoration: none;">{{ ref }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}PathFinder AD — Active Directory Security Assessment{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('main.dashboard') }}" class="brand">
+            <div class="brand-shield">&#9881;</div>
+            <div>
+                <span class="brand-title">PathFinder AD</span>
+                <span class="brand-subtitle">AD Security Assessment Engine</span>
+            </div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('main.dashboard') }}" class="nav-link {% if active_tab == 'dashboard' %}active{% endif %}">Dashboard</a></li>
+            <li><a href="{{ url_for('main.findings') }}" class="nav-link {% if active_tab == 'findings' %}active{% endif %}">Findings</a></li>
+            <li><a href="{{ url_for('main.paths') }}" class="nav-link {% if active_tab == 'paths' %}active{% endif %}">Attack Paths</a></li>
+            <li><a href="{{ url_for('main.inventory') }}" class="nav-link {% if active_tab == 'inventory' %}active{% endif %}">Inventory</a></li>
+            <li><a href="{{ url_for('main.upload') }}" class="nav-link {% if active_tab == 'upload' %}active{% endif %}">Datasets</a></li>
+            <li class="nav-export-dropdown">
+                <button class="btn-export">
+                    <span>Export</span> &#9662;
+                </button>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('main.export_html') }}">HTML Report</a>
+                    <a href="{{ url_for('main.export_markdown') }}">Markdown Report</a>
+                    <a href="{{ url_for('main.export_json') }}">JSON Data</a>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>PathFinder AD &bull; Defensive Active Directory Security Audit Portfolio Project &bull; Offline Static Analysis</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

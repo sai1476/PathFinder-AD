@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Active Directory Inventory Browser</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">
+            Domain: <strong>{{ inventory.domain }}</strong> &bull;
+            Users: {{ inventory.users|length }} &bull;
+            Groups: {{ inventory.groups|length }} &bull;
+            Computers: {{ inventory.computers|length }} &bull;
+            ACLs: {{ inventory.acls|length }}
+        </p>
+    </div>
+</div>
+
+<div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem;">
+    <a href="{{ url_for('main.inventory', tab='users') }}" class="btn {% if active_subtab == 'users' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Users ({{ inventory.users|length }})</a>
+    <a href="{{ url_for('main.inventory', tab='groups') }}" class="btn {% if active_subtab == 'groups' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Groups ({{ inventory.groups|length }})</a>
+    <a href="{{ url_for('main.inventory', tab='computers') }}" class="btn {% if active_subtab == 'computers' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Computers ({{ inventory.computers|length }})</a>
+    <a href="{{ url_for('main.inventory', tab='acls') }}" class="btn {% if active_subtab == 'acls' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">ACLs ({{ inventory.acls|length }})</a>
+    <a href="{{ url_for('main.inventory', tab='issues') }}" class="btn {% if active_subtab == 'issues' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">Schema Issues ({{ inventory.issues|length }})</a>
+</div>
+
+{% if active_subtab == 'users' %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>SAM Account</th>
+                <th>Display Name</th>
+                <th>Enabled</th>
+                <th>Admin Count</th>
+                <th>SPNs</th>
+                <th>UAC Flags</th>
+                <th>Last Logon</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in inventory.users.values() %}
+            <tr>
+                <td><strong>{{ u.sam_account_name }}</strong></td>
+                <td>{{ u.display_name or '-' }}</td>
+                <td>
+                    {% if u.enabled %}
+                    <span class="badge badge-low">Enabled</span>
+                    {% else %}
+                    <span class="badge badge-info">Disabled</span>
+                    {% endif %}
+                </td>
+                <td>{{ u.admin_count }}</td>
+                <td>{{ u.spn|join(', ') or '-' }}</td>
+                <td><code>{{ u.user_account_control|join(', ') or '-' }}</code></td>
+                <td>{{ u.last_logon_timestamp or 'Never' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_subtab == 'groups' %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>SAM Account</th>
+                <th>Privileged Tier-0</th>
+                <th>Direct Members</th>
+                <th>Member Of</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for g in inventory.groups.values() %}
+            <tr>
+                <td><strong>{{ g.sam_account_name }}</strong></td>
+                <td>
+                    {% if g.is_privileged %}
+                    <span class="badge badge-critical">Tier-0 Admin</span>
+                    {% else %}
+                    <span class="badge badge-info">Standard</span>
+                    {% endif %}
+                </td>
+                <td>{{ g.members|join(', ') or '-' }}</td>
+                <td>{{ g.member_of|join(', ') or '-' }}</td>
+                <td>{{ g.description or '-' }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_subtab == 'computers' %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>SAM Account</th>
+                <th>Operating System</th>
+                <th>Domain Controller</th>
+                <th>Delegation</th>
+                <th>UAC Flags</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in inventory.computers.values() %}
+            <tr>
+                <td><strong>{{ c.sam_account_name }}</strong></td>
+                <td>{{ c.operating_system }}</td>
+                <td>
+                    {% if c.is_domain_controller %}
+                    <span class="badge badge-critical">Yes (DC)</span>
+                    {% else %}
+                    <span class="badge badge-info">Member Server</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if c.is_unconstrained_delegation %}
+                    <span class="badge badge-critical">Unconstrained</span>
+                    {% else %}
+                    {{ c.delegation_type }}
+                    {% endif %}
+                </td>
+                <td><code>{{ c.user_account_control|join(', ') or '-' }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_subtab == 'acls' %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Principal (Holder)</th>
+                <th>Permission Right</th>
+                <th>Target Object</th>
+                <th>Inherited</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in inventory.acls %}
+            <tr>
+                <td><code>{{ a.principal_name }}</code></td>
+                <td><span class="badge badge-high">{{ a.right }}</span></td>
+                <td><code>{{ a.target_name }}</code></td>
+                <td>{{ a.is_inherited }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_subtab == 'issues' %}
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Severity</th>
+                <th>Property / Location</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in inventory.issues %}
+            <tr>
+                <td><span class="badge badge-{% if i.severity == 'ERROR' %}critical{% else %}medium{% endif %}">{{ i.severity }}</span></td>
+                <td><code>{{ i.field_name }}</code></td>
+                <td>{{ i.message }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" style="text-align: center; color: var(--text-muted); padding: 2rem;">
+                    No schema or reference consistency issues detected.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}

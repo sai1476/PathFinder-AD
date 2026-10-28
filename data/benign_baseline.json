@@ -1,0 +1,113 @@
+{
+  "domain": "SECURE.CORP.LOCAL",
+  "generated_at": "2026-10-01T00:00:00Z",
+  "users": [
+    {
+      "sam_account_name": "adm_hardened",
+      "display_name": "Hardened Domain Admin",
+      "distinguished_name": "CN=Adm Hardened,OU=Tier0_Admins,DC=secure,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 1,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-30T10:00:00Z",
+      "password_last_set": "2026-09-01T08:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=secure,DC=corp,DC=local"
+      ],
+      "department": "Security Infrastructure"
+    },
+    {
+      "sam_account_name": "std_analyst",
+      "display_name": "Standard Security Analyst",
+      "distinguished_name": "CN=Std Analyst,OU=Staff,DC=secure,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-29T14:30:00Z",
+      "password_last_set": "2026-07-15T11:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=SOC Analysts,OU=Groups,DC=secure,DC=corp,DC=local"
+      ],
+      "department": "Cyber Defense"
+    },
+    {
+      "sam_account_name": "gmsa_app$",
+      "display_name": "Group Managed Service Account",
+      "distinguished_name": "CN=gmsa_app,OU=ManagedServiceAccounts,DC=secure,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [
+        "HTTP/webapp.secure.corp.local"
+      ],
+      "user_account_control": ["WORKSTATION_TRUST_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-30T00:00:00Z",
+      "password_last_set": "2026-09-20T00:00:00Z",
+      "password_never_expires": true,
+      "member_of": [],
+      "department": "Application Automation"
+    },
+    {
+      "sam_account_name": "former_emp",
+      "display_name": "Former Employee (Properly Disabled)",
+      "distinguished_name": "CN=Former Emp,OU=Disabled,DC=secure,DC=corp,DC=local",
+      "enabled": false,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["ACCOUNTDISABLE"],
+      "last_logon_timestamp": "2023-01-01T00:00:00Z",
+      "password_last_set": "2022-12-01T00:00:00Z",
+      "password_never_expires": false,
+      "member_of": [],
+      "department": "Former Staff"
+    }
+  ],
+  "groups": [
+    {
+      "sam_account_name": "Domain Admins",
+      "distinguished_name": "CN=Domain Admins,CN=Users,DC=secure,DC=corp,DC=local",
+      "is_privileged": true,
+      "members": [
+        "CN=Adm Hardened,OU=Tier0_Admins,DC=secure,DC=corp,DC=local"
+      ],
+      "member_of": [],
+      "description": "Restricted Tier-0 Administrators"
+    },
+    {
+      "sam_account_name": "SOC Analysts",
+      "distinguished_name": "CN=SOC Analysts,OU=Groups,DC=secure,DC=corp,DC=local",
+      "is_privileged": false,
+      "members": [
+        "CN=Std Analyst,OU=Staff,DC=secure,DC=corp,DC=local"
+      ],
+      "member_of": [],
+      "description": "Standard SOC team group"
+    }
+  ],
+  "computers": [
+    {
+      "sam_account_name": "SEC-DC01$",
+      "distinguished_name": "CN=SEC-DC01,OU=Domain Controllers,DC=secure,DC=corp,DC=local",
+      "operating_system": "Windows Server 2022 Datacenter",
+      "enabled": true,
+      "is_domain_controller": true,
+      "delegation_type": "Unconstrained",
+      "user_account_control": ["SERVER_TRUST_ACCOUNT", "TRUSTED_FOR_DELEGATION"],
+      "member_of": []
+    },
+    {
+      "sam_account_name": "SEC-WS01$",
+      "distinguished_name": "CN=SEC-WS01,OU=Workstations,DC=secure,DC=corp,DC=local",
+      "operating_system": "Windows 11 Enterprise",
+      "enabled": true,
+      "is_domain_controller": false,
+      "delegation_type": "None",
+      "user_account_control": ["WORKSTATION_TRUST_ACCOUNT"],
+      "member_of": []
+    }
+  ],
+  "acls": []
+}

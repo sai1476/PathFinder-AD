@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Active Directory Security Assessment</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">
+            Target Domain: <strong style="color: var(--text-primary);">{{ state.inventory.domain }}</strong> &bull;
+            Generated: {{ state.inventory.generated_at }}
+        </p>
+    </div>
+    <div class="dataset-badge">
+        <span class="status-dot"></span>
+        <span>Active: {{ state.source_name }}</span>
+    </div>
+</div>
+
+<div class="metrics-row">
+    <div class="metric-card">
+        <div class="metric-label">Total Findings</div>
+        <div class="metric-value">{{ summary.total_findings }}</div>
+        <div class="metric-sub">Across 7 Assessment Rules</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Critical Risks</div>
+        <div class="metric-value" style="color: var(--severity-critical);">{{ summary.severity_counts.CRITICAL }}</div>
+        <div class="metric-sub">Immediate Tier-0 Impact</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">High Risks</div>
+        <div class="metric-value" style="color: var(--severity-high);">{{ summary.severity_counts.HIGH }}</div>
+        <div class="metric-sub">Privilege Escalation Exposure</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Medium Risks</div>
+        <div class="metric-value" style="color: var(--severity-medium);">{{ summary.severity_counts.MEDIUM }}</div>
+        <div class="metric-sub">Hygiene & Inactive Accounts</div>
+    </div>
+    <div class="metric-card">
+        <div class="metric-label">Attack Paths</div>
+        <div class="metric-value" style="color: var(--brand-accent);">{{ summary.total_paths }}</div>
+        <div class="metric-sub">Discovered Relationship Chains</div>
+    </div>
+</div>
+
+<div class="table-container">
+    <div class="table-header-tools">
+        <span class="table-title">Top Security Findings</span>
+        <a href="{{ url_for('main.findings') }}" class="btn btn-secondary btn-sm">View All {{ summary.total_findings }} Findings &rarr;</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 100px;">Severity</th>
+                <th style="width: 110px;">Rule ID</th>
+                <th>Finding Title</th>
+                <th>Affected Object</th>
+                <th style="width: 100px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in top_findings %}
+            <tr>
+                <td><span class="badge badge-{{ f.severity|lower }}">{{ f.severity }}</span></td>
+                <td><span class="cell-muted">{{ f.rule_id }}</span></td>
+                <td class="cell-title"><a href="{{ url_for('main.finding_detail', finding_id=f.id) }}">{{ f.title }}</a></td>
+                <td><code>{{ f.affected_object }}</code></td>
+                <td><a href="{{ url_for('main.finding_detail', finding_id=f.id) }}" class="btn btn-secondary btn-sm">Details</a></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No findings identified in this dataset.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+    <div class="card">
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Inventory Breakdown</h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.75rem;">
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+                <span style="color: var(--text-secondary);">User Accounts Analyzed</span>
+                <strong>{{ summary.total_users }}</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+                <span style="color: var(--text-secondary);">Security Groups</span>
+                <strong>{{ summary.total_groups }}</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+                <span style="color: var(--text-secondary);">Domain Computers & Servers</span>
+                <strong>{{ summary.total_computers }}</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle); padding-bottom: 0.5rem;">
+                <span style="color: var(--text-secondary);">Explicit Access Control Entries (ACLs)</span>
+                <strong>{{ summary.total_acls }}</strong>
+            </li>
+            <li style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-secondary);">Schema / Reference Warnings</span>
+                <strong style="color: {% if summary.validation_issues_count > 0 %}var(--severity-medium){% else %}var(--success){% endif %};">
+                    {{ summary.validation_issues_count }}
+                </strong>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom: 1rem; font-size: 1.1rem;">Detection Rules Triggered</h3>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem;">
+            {% for r_id, count in rule_counts.items() %}
+            <li style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-card-subtle); padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">
+                <code>{{ r_id }}</code>
+                <span class="badge badge-info">{{ count }} finding{% if count > 1 %}s{% endif %}</span>
+            </li>
+            {% else %}
+            <li style="color: var(--text-muted);">No rules triggered.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

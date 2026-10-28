@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>Security Assessment Findings</h1>
+        <p style="color: var(--text-secondary); margin-top: 0.25rem;">
+            Showing {{ findings|length }} of {{ total_count }} total findings identified.
+        </p>
+    </div>
+</div>
+
+<div class="table-container">
+    <div class="table-header-tools">
+        <form method="GET" action="{{ url_for('main.findings') }}" class="filter-group">
+            <input type="text" name="q" value="{{ search_query }}" placeholder="Filter findings..." class="form-control" style="min-width: 200px;">
+            <select name="severity" class="form-control">
+                <option value="">All Severities</option>
+                <option value="CRITICAL" {% if current_sev == 'CRITICAL' %}selected{% endif %}>Critical</option>
+                <option value="HIGH" {% if current_sev == 'HIGH' %}selected{% endif %}>High</option>
+                <option value="MEDIUM" {% if current_sev == 'MEDIUM' %}selected{% endif %}>Medium</option>
+                <option value="LOW" {% if current_sev == 'LOW' %}selected{% endif %}>Low</option>
+            </select>
+            <select name="rule_id" class="form-control">
+                <option value="">All Rules</option>
+                {% for r in all_rules %}
+                <option value="{{ r }}" {% if current_rule == r %}selected{% endif %}>{{ r }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+            {% if search_query or current_sev or current_rule %}
+            <a href="{{ url_for('main.findings') }}" class="btn btn-secondary btn-sm">Reset</a>
+            {% endif %}
+        </form>
+    </div>
+
+    <table class="searchable-table">
+        <thead>
+            <tr>
+                <th style="width: 100px;">Severity</th>
+                <th style="width: 110px;">Rule ID</th>
+                <th>Title</th>
+                <th>Affected Object</th>
+                <th style="width: 90px;">Type</th>
+                <th style="width: 90px;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for f in findings %}
+            <tr>
+                <td><span class="badge badge-{{ f.severity|lower }}">{{ f.severity }}</span></td>
+                <td><code>{{ f.rule_id }}</code></td>
+                <td class="cell-title"><a href="{{ url_for('main.finding_detail', finding_id=f.id) }}">{{ f.title }}</a></td>
+                <td><code>{{ f.affected_object }}</code></td>
+                <td><span class="badge badge-info">{{ f.object_type }}</span></td>
+                <td><a href="{{ url_for('main.finding_detail', finding_id=f.id) }}" class="btn btn-secondary btn-sm">View</a></td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+                    No findings match the selected criteria.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

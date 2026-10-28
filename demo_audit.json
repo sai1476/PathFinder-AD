@@ -1,0 +1,115 @@
+{
+  "domain": "DEMO.CORP.LOCAL",
+  "generated_at": "2026-10-01T00:00:00Z",
+  "users": [
+    {
+      "sam_account_name": "it_admin",
+      "display_name": "Designated Administrator",
+      "distinguished_name": "CN=IT Admin,OU=Admins,DC=demo,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 1,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-29T10:00:00Z",
+      "password_last_set": "2026-09-01T12:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=demo,DC=corp,DC=local"
+      ]
+    },
+    {
+      "sam_account_name": "sql_admin_service",
+      "display_name": "SQL Domain Admin Service",
+      "distinguished_name": "CN=SQL Admin,OU=ServiceAccounts,DC=demo,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 1,
+      "spn": ["MSSQLSvc/db01.demo.local:1433"],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-20T08:00:00Z",
+      "password_last_set": "2024-01-10T14:00:00Z",
+      "password_never_expires": true,
+      "member_of": [
+        "CN=Domain Admins,CN=Users,DC=demo,DC=corp,DC=local"
+      ]
+    },
+    {
+      "sam_account_name": "dormant_developer",
+      "display_name": "Dormant Developer Account",
+      "distinguished_name": "CN=Dormant Dev,OU=Developers,DC=demo,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2025-10-15T09:00:00Z",
+      "password_last_set": "2025-01-10T11:00:00Z",
+      "password_never_expires": false,
+      "member_of": []
+    },
+    {
+      "sam_account_name": "contractor_steve",
+      "display_name": "Steve Vendor",
+      "distinguished_name": "CN=Steve Vendor,OU=Contractors,DC=demo,DC=corp,DC=local",
+      "enabled": true,
+      "admin_count": 0,
+      "spn": [],
+      "user_account_control": ["NORMAL_ACCOUNT"],
+      "last_logon_timestamp": "2026-09-28T14:00:00Z",
+      "password_last_set": "2026-08-01T10:00:00Z",
+      "password_never_expires": false,
+      "member_of": [
+        "CN=Contractors,OU=Groups,DC=demo,DC=corp,DC=local"
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "sam_account_name": "Domain Admins",
+      "distinguished_name": "CN=Domain Admins,CN=Users,DC=demo,DC=corp,DC=local",
+      "is_privileged": true,
+      "members": [
+        "CN=IT Admin,OU=Admins,DC=demo,DC=corp,DC=local",
+        "CN=SQL Admin,OU=ServiceAccounts,DC=demo,DC=corp,DC=local"
+      ],
+      "member_of": []
+    },
+    {
+      "sam_account_name": "Contractors",
+      "distinguished_name": "CN=Contractors,OU=Groups,DC=demo,DC=corp,DC=local",
+      "is_privileged": false,
+      "members": [
+        "CN=Steve Vendor,OU=Contractors,DC=demo,DC=corp,DC=local"
+      ],
+      "member_of": []
+    }
+  ],
+  "computers": [
+    {
+      "sam_account_name": "DC01$",
+      "distinguished_name": "CN=DC01,OU=Domain Controllers,DC=demo,DC=corp,DC=local",
+      "operating_system": "Windows Server 2022 Datacenter",
+      "enabled": true,
+      "is_domain_controller": true,
+      "delegation_type": "Unconstrained",
+      "user_account_control": ["SERVER_TRUST_ACCOUNT", "TRUSTED_FOR_DELEGATION"],
+      "member_of": []
+    },
+    {
+      "sam_account_name": "APP-SRV01$",
+      "distinguished_name": "CN=APP-SRV01,OU=MemberServers,DC=demo,DC=corp,DC=local",
+      "operating_system": "Windows Server 2019 Standard",
+      "enabled": true,
+      "is_domain_controller": false,
+      "delegation_type": "Unconstrained",
+      "user_account_control": ["WORKSTATION_TRUST_ACCOUNT", "TRUSTED_FOR_DELEGATION"],
+      "member_of": []
+    }
+  ],
+  "acls": [
+    {
+      "principal_name": "CN=Contractors,OU=Groups,DC=demo,DC=corp,DC=local",
+      "target_name": "CN=Domain Admins,CN=Users,DC=demo,DC=corp,DC=local",
+      "right": "WriteDacl",
+      "is_inherited": false
+    }
+  ]
+}
